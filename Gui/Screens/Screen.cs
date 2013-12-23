@@ -9,6 +9,6 @@ namespace Gui.Screens
     public abstract class Screen
     {
         //Transition part
-        public int Transition;
+        public int Transition
     }
 }
