@@ -9,6 +9,7 @@
         <sharpGL:OpenGLControl 
             Name="openGLControl" OpenGLDraw="openGLControl_OpenGLDraw" 
             OpenGLInitialized="openGLControl_OpenGLInitialized" Resized="openGLControl_Resized"
+            MouseDoubleClick="openGLControl_MouseDoubleClick"
             DrawFPS="True" RenderContextType="FBO" FrameRate="20"/>
         
     </Grid>

@@ -36,9 +36,11 @@ namespace Gui.Helper
             gl.LoadIdentity();
 
             // Make sure depth testing and lighting are disabled for 2D rendering until we are finished rendering in 2D
-            gl.PushAttrib(OpenGL.GL_DEPTH_BUFFER_BIT | OpenGL.GL_LIGHTING_BIT);
+            gl.PushAttrib(OpenGL.GL_DEPTH_BUFFER_BIT | OpenGL.GL_LIGHTING_BIT | OpenGL.GL_TEXTURE_2D);
             gl.Disable(OpenGL.GL_DEPTH_TEST);
             gl.Disable(OpenGL.GL_LIGHTING);
+            gl.Enable(OpenGL.GL_TEXTURE_2D);
+            gl.Color(1f, 1f, 1f, 1f);
         }
 
         public static void glDisable2D(OpenGL gl)

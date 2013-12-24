@@ -11,8 +11,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Timers;
 using SharpGL.SceneGraph;
 using SharpGL;
+using Gui.Screens;
+using Gui.Helper;
+using GuiBuilder.Screens;
 
 namespace GuiBuilder
 {
@@ -21,12 +25,32 @@ namespace GuiBuilder
     /// </summary>
     public partial class MainWindow : Window
     {
+        ScreenManager screenManager;
+        DateTime StartingDate;
+        DateTime LastUpdate;
+        DateTime LastDraw;
+        TimeSpan TotalGameTime;
+        Timer timer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
         public MainWindow()
         {
             InitializeComponent();
+
+            StartingDate = DateTime.Now;
+            timer = new Timer(1000 / 20);
+            timer.Elapsed += timer_Elapsed;
+        }
+
+        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //Update
+            TimeSpan elapsed = TimeSpan.FromMilliseconds((DateTime.Now - LastUpdate).TotalMilliseconds);
+            TotalGameTime += TimeSpan.FromMilliseconds((DateTime.Now - StartingDate).TotalMilliseconds);
+            screenManager.Update(elapsed);
+            LastUpdate = DateTime.Now;
         }
 
         /// <summary>
@@ -36,6 +60,7 @@ namespace GuiBuilder
         /// <param name="args">The <see cref="SharpGL.SceneGraph.OpenGLEventArgs"/> instance containing the event data.</param>
         private void openGLControl_OpenGLDraw(object sender, OpenGLEventArgs args)
         {
+            TimeSpan elapsed = TimeSpan.FromMilliseconds((DateTime.Now - LastDraw).TotalMilliseconds);
             //  Get the OpenGL object.
             OpenGL gl = openGLControl.OpenGL;
 
@@ -44,8 +69,10 @@ namespace GuiBuilder
 
             //  Load the identity matrix.
             gl.LoadIdentity();
+            screenManager.Draw(gl, elapsed);
 
-            //  Rotate around the Y axis.
+            LastDraw = DateTime.Now;
+            /*//  Rotate around the Y axis.
             gl.Rotate(rotation, 0.0f, 1.0f, 0.0f);
 
             //  Draw a coloured pyramid.
@@ -77,7 +104,7 @@ namespace GuiBuilder
             gl.End();
 
             //  Nudge the rotation.
-            rotation += 3.0f;
+            rotation += 3.0f;*/
         }
 
         /// <summary>
@@ -94,7 +121,24 @@ namespace GuiBuilder
 
             //  Set the clear color.
             gl.ClearColor(0, 0, 0, 0);
+
+            GlobalValues.Init(gl);
+
+            screenManager = new ScreenManager(gl);
+            screenManager.OpenScreen(new MainMenuScreen(screenManager));
+
+            timer.Start();
+            LastUpdate = DateTime.Now;
+            LastDraw = DateTime.Now;
+
+            openGLControl.MouseDoubleClick += openGLControl_MouseDoubleClick;
         }
+
+        void openGLControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            screenManager.CloseAllAndThenOpen(new MainMenuScreen(screenManager));
+        }
+
 
         /// <summary>
         /// Handles the Resized event of the openGLControl1 control.
@@ -122,6 +166,8 @@ namespace GuiBuilder
 
             //  Set the modelview matrix.
             gl.MatrixMode(OpenGL.GL_MODELVIEW);
+
+            GlobalValues.Resized(gl);
         }
 
         /// <summary>
