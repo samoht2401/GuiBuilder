@@ -16,6 +16,13 @@ namespace Gui.Helper
             // Get a copy of the viewport
             gl.GetInteger(OpenGL.GL_VIEWPORT, iViewport);
 
+            int width = iViewport[2];
+            int height = iViewport[3];
+            int left = -width / 2;
+            int right = width / 2;
+            int top = -height / 2;
+            int bottom = height / 2;
+
             // Save a copy of the projection matrix so that we can restore it 
             // when it's time to do 3D rendering again.
             gl.MatrixMode(OpenGL.GL_PROJECTION);
@@ -23,7 +30,7 @@ namespace Gui.Helper
             gl.LoadIdentity();
 
             // Set up the orthographic projection
-            gl.Ortho(iViewport[0], iViewport[0] + iViewport[2], iViewport[1] + iViewport[3], iViewport[1], -1, 1);
+            gl.Ortho(left, right, bottom, top, -1, 1);
             gl.MatrixMode(OpenGL.GL_MODELVIEW);
             gl.PushMatrix();
             gl.LoadIdentity();
