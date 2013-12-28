@@ -37,6 +37,12 @@ namespace Gui.Transitions
             Type = type;
         }
 
+        public void SetTransitionDuration(TimeSpan totalTime)
+        {
+            if (ActualState != States.Progressing)
+                TotalTime = totalTime;
+        }
+
         public virtual bool Start()
         {
             if (ActualState != States.NotStart && ActualState != States.Paused)

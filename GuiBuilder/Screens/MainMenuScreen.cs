@@ -16,7 +16,7 @@ namespace GuiBuilder.Screens
         public MainMenuScreen(ScreenManager manager)
             : base(manager)
         {
-            OpeningTransition = new ScalingTransition(Transition.Types.Opening);
+            OpeningTransition = new XTransTransition(Transition.Types.Opening);
             ClosingTransition = new XTransTransition(Transition.Types.Closing);
 
             SpriteLoader.LoadTextures(manager.OpenGL, "test", Directory.GetCurrentDirectory() + "\\Sprites\\supernova.jpg");
@@ -26,24 +26,14 @@ namespace GuiBuilder.Screens
         {
             base.Draw(gl, elapsed, isInForeground);
             int size = Math.Max(GlobalValues.ViewportWidth, GlobalValues.ViewportHeight) / 2;
-            DrawHelper.glEnable2D(gl);
+            DrawHelper.glEnable2D();
+
             ApplyTransitionTransformation(gl);
-
+            gl.Scale(size, size, size);
             SpriteLoader.Bind(gl, "test");
-
-            gl.Begin(OpenGL.GL_QUAD_STRIP);
-            gl.TexCoord(0.0f, 0.0f, 0.0f);
-            gl.Vertex(-size, -size, 0.0f);
-            gl.TexCoord(0.0f, 1.0f, 0.0f);
-            gl.Vertex(-size, size, 0.0f);
-            gl.TexCoord(1.0f, 0.0f, 0.0f);
-            gl.Vertex(size, -size, 0.0f);
-            gl.TexCoord(1.0f, 1.0f, 0.0f);
-            gl.Vertex(size, size, 0.0f);
-            gl.End();
-
+            DrawHelper.glDraw2DSprite();
             UndoTransitionTransformation(gl);
-            DrawHelper.glDisable2D(gl);
+            DrawHelper.glDisable2D();
         }
     }
 }

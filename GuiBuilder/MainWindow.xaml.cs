@@ -123,6 +123,7 @@ namespace GuiBuilder
             gl.ClearColor(0, 0, 0, 0);
 
             GlobalValues.Init(gl);
+            DrawHelper.Init(gl);
 
             screenManager = new ScreenManager(gl);
             screenManager.OpenScreen(new MainMenuScreen(screenManager));
@@ -151,7 +152,7 @@ namespace GuiBuilder
 
             //  Get the OpenGL object.
             OpenGL gl = openGLControl.OpenGL;
-
+            
             //  Set the projection matrix.
             gl.MatrixMode(OpenGL.GL_PROJECTION);
 
