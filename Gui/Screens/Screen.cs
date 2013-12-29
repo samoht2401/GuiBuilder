@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using SharpGL;
 using Gui.Transitions;
+using Gui.Controls;
+using System.Windows.Input;
 
 namespace Gui.Screens
 {
@@ -22,6 +24,7 @@ namespace Gui.Screens
         public ScreenManager Manager { get; private set; }
         //Transition part
         public States State { get; protected set; }
+        public Dictionary<string, Control> Controls { get; protected set; }
         public Transition OpeningTransition;
         public Transition ClosingTransition;
 
@@ -29,6 +32,7 @@ namespace Gui.Screens
         {
             Manager = manager;
             State = States.Sleeping;
+            Controls = new Dictionary<string, Control>();
         }
 
         public virtual void Open()
@@ -53,7 +57,7 @@ namespace Gui.Screens
                             State = States.Opened;
                         break;
                     }
-                case States.Opened: return;
+                case States.Opened: break;
                 case States.Closing:
                     {
                         if (ClosingTransition.ActualState == Transition.States.Finish)
@@ -62,6 +66,9 @@ namespace Gui.Screens
                     }
                 case States.FullyClosed: return;
             }
+            if (isInForeground)
+                foreach (Control c in Controls.Values)
+                    c.Update(elapsed);
         }
         public virtual void Draw(OpenGL gl, TimeSpan elapsed, bool isInForeground)
         {
@@ -69,6 +76,12 @@ namespace Gui.Screens
                 OpeningTransition.Update(elapsed);
             else if (State == States.Closing)
                 ClosingTransition.Update(elapsed);
+        }
+        public virtual void DrawControls(OpenGL gl, TimeSpan elapsed, bool isInForeground)
+        {
+            if (State != States.Sleeping && State != States.FullyClosed)
+                foreach (Control c in Controls.Values)
+                    c.Draw(gl, elapsed);
         }
         protected void ApplyTransitionTransformation(OpenGL gl)
         {
@@ -83,6 +96,19 @@ namespace Gui.Screens
                 OpeningTransition.UndoTransformation(gl);
             else if (State == States.Closing)
                 ClosingTransition.UndoTransformation(gl);
+        }
+
+        public virtual void MouveMoveEvent(object sender, MouseEventArgs e)
+        {
+            if (State == States.Opened)
+                foreach (Control c in Controls.Values)
+                    c.MouseMoveEvent(sender, e);
+        }
+        public virtual void MouseButtonDownEvent(object sender, MouseButtonEventArgs e)
+        {
+            if (State == States.Opened)
+                foreach (Control c in Controls.Values)
+                    c.MouseButtonDownEvent(sender, e);
         }
     }
 }

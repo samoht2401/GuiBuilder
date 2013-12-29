@@ -10,5 +10,10 @@ namespace Gui.Bounds
     {
         bool Intersect(Point other);
         bool Intersect(Bound other);
+
+        int getMinX();
+        int getMinY();
+        int getMaxWidth();
+        int getMaxHeight();
     }
 }

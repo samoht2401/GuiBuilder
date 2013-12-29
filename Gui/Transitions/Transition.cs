@@ -24,7 +24,7 @@ namespace Gui.Transitions
 
         public States ActualState { get; protected set; }
         public TimeSpan ActualTime { get; protected set; }
-        public TimeSpan TotalTime { get; protected set; }
+        public TimeSpan TotalTime { get; set; }
         public double Avancement { get; protected set; }
         public Types Type { get; protected set; }
 

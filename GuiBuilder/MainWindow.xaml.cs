@@ -31,6 +31,7 @@ namespace GuiBuilder
         DateTime LastDraw;
         TimeSpan TotalGameTime;
         Timer timer;
+        Point MousePosition;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -47,6 +48,7 @@ namespace GuiBuilder
         void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             //Update
+            InputHelper.Update(GlobalValues.ViewportWidth, GlobalValues.ViewportHeight, MousePosition);
             TimeSpan elapsed = TimeSpan.FromMilliseconds((DateTime.Now - LastUpdate).TotalMilliseconds);
             TotalGameTime += TimeSpan.FromMilliseconds((DateTime.Now - StartingDate).TotalMilliseconds);
             screenManager.Update(elapsed);
@@ -63,6 +65,7 @@ namespace GuiBuilder
             TimeSpan elapsed = TimeSpan.FromMilliseconds((DateTime.Now - LastDraw).TotalMilliseconds);
             //  Get the OpenGL object.
             OpenGL gl = openGLControl.OpenGL;
+            MousePosition = Mouse.GetPosition(openGLControl);
 
             //  Clear the color and depth buffer.
             gl.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
@@ -133,11 +136,13 @@ namespace GuiBuilder
             LastDraw = DateTime.Now;
 
             openGLControl.MouseDoubleClick += openGLControl_MouseDoubleClick;
+            openGLControl.MouseMove += InputHelper.MouseMove;
+            openGLControl.MouseDown += InputHelper.MouseButtonDown;
         }
 
         void openGLControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            screenManager.CloseAllAndThenOpen(new MainMenuScreen(screenManager));
+            //screenManager.CloseAllAndThenOpen(new MainMenuScreen(screenManager));
         }
 
 
@@ -152,7 +157,7 @@ namespace GuiBuilder
 
             //  Get the OpenGL object.
             OpenGL gl = openGLControl.OpenGL;
-            
+
             //  Set the projection matrix.
             gl.MatrixMode(OpenGL.GL_PROJECTION);
 

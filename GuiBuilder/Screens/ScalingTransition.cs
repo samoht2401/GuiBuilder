@@ -17,7 +17,7 @@ namespace GuiBuilder.Screens
 
         public override void ApplyTransformation(OpenGL gl)
         {
-            double mult = Avancement;
+            double mult = Avancement * Avancement;
             if (Type == Types.Closing)
                 mult = 1 - mult;
 

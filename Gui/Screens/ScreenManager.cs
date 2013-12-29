@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SharpGL;
+using System.Windows.Input;
+using Gui.Helper;
 
 namespace Gui.Screens
 {
@@ -17,6 +19,8 @@ namespace Gui.Screens
         {
             OpenGL = gl;
             Screens = new Stack<Screen>();
+            InputHelper.MouseMoveEvent += MouseMoveEvent;
+            InputHelper.MouseButtonDownEvent += MouseButtonDownEvent;
         }
 
         public void OpenScreen(Screen toOpen)
@@ -24,12 +28,10 @@ namespace Gui.Screens
             Screens.Push(toOpen);
             toOpen.Open();
         }
-
         public void CloseScreen()
         {
             Screens.Peek().Close();
         }
-
         public void CloseAllAndThenOpen(Screen toOpen)
         {
             foreach (Screen toClose in Screens)
@@ -43,7 +45,7 @@ namespace Gui.Screens
             List<Screen> Temp = Screens.ToList();
             foreach (Screen screen in Temp)
             {
-                if(screen.State == Screen.States.FullyClosed)
+                if (screen.State == Screen.States.FullyClosed)
                 {
                     if (screen == foregroundScreen)
                         Screens.Pop();
@@ -58,16 +60,25 @@ namespace Gui.Screens
                 toOpenWhenCleared = null;
             }
         }
-
         public void Draw(OpenGL gl, TimeSpan elapsed)
         {
             Screen foregroundScreen = Screens.Peek();
             Screens.Reverse();
-            foreach (Screen screen in Screens)
+            List<Screen> Temp = Screens.ToList();
+            foreach (Screen screen in Temp)
             {
                 screen.Draw(gl, elapsed, screen == foregroundScreen);
             }
             Screens.Reverse();
+        }
+
+        public void MouseMoveEvent(object sender, MouseEventArgs e)
+        {
+            Screens.Peek().MouveMoveEvent(sender, e);
+        }
+        public void MouseButtonDownEvent(object sender, MouseButtonEventArgs e)
+        {
+            Screens.Peek().MouseButtonDownEvent(sender, e);
         }
     }
 }

@@ -10,5 +10,13 @@ namespace Gui.Bounds
     {
         public int X { get; set; }
         public int Y { get; set; }
+
+        public static Point New(int x, int y)
+        {
+            Point result = new Point();
+            result.X = x;
+            result.Y = y;
+            return result;
+        }
     }
 }

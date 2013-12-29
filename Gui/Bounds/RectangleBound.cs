@@ -15,6 +15,16 @@ namespace Gui.Bounds
         public int Width { get { return XMax - X; } set { XMax -= Width - value; } }
         public int Height { get { return YMax - Y; } set { YMax -= Height - value; } }
 
+        public static RectangleBound New(int x, int y, int width, int height)
+        {
+            RectangleBound r = new RectangleBound();
+            r.X = x;
+            r.Y = y;
+            r.Width = width;
+            r.Height = height;
+            return r;
+        }
+
         public bool Intersect(Point other)
         {
             if (other.X < X)
@@ -37,15 +47,31 @@ namespace Gui.Bounds
 
         public bool Intersect(RectangleBound other)
         {
-            if (other.X > XMax)
+            if (other.X >= XMax)
                 return false;
-            if (other.Y > YMax)
+            if (other.Y >= YMax)
                 return false;
-            if (other.XMax < X)
+            if (other.XMax <= X)
                 return false;
-            if (other.YMax < Y)
+            if (other.YMax <= Y)
                 return false;
             return true;
+        }
+        public int getMinX()
+        {
+            return X;
+        }
+        public int getMinY()
+        {
+            return Y;
+        }
+        public int getMaxWidth()
+        {
+            return Width;
+        }
+        public int getMaxHeight()
+        {
+            return Height;
         }
     }
 }

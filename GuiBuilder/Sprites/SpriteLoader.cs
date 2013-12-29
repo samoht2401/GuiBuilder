@@ -13,12 +13,13 @@ namespace GuiBuilder.Sprites
     {
         private static Dictionary<String, Texture> textures = new Dictionary<String, Texture>();
 
-        public static void LoadTextures(OpenGL gl, string name, string path)
+        public static Texture LoadTextures(OpenGL gl, string name, string path)
         {
             if (textures.ContainsKey(name))
-                return;
+                return textures[name];
             textures.Add(name, new Texture());
-            textures[name].Create(gl, path);
+            textures[name].Create(gl, new Bitmap(path));
+            return textures[name];
         }
 
         public static void Bind(OpenGL gl, String tex)

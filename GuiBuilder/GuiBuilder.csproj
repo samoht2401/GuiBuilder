@@ -80,7 +80,7 @@
     <Compile Include="GlobalValues.cs" />
     <Compile Include="Screens\MainMenuScreen.cs" />
     <Compile Include="Screens\ScalingTransition.cs" />
-    <Compile Include="Screens\XTransTransition.cs" />
+    <Compile Include="Screens\TransTransition.cs" />
     <Compile Include="Sprites\SpriteLoader.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -133,6 +133,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Dependencies\SharpGL.Serialization.dll" />
+    <Content Include="Sprites\pieuvre.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sprites\pieuvre2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sprites\pieuvre_ombre.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Sprites\supernova.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
